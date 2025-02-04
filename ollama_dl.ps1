@@ -1,4 +1,3 @@
-#!/usr/bin/env pwsh
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -9,6 +8,21 @@ param(
     [Alias("d")]
     [string]$DestDir
 )
+
+if ($ExecutionContext.SessionState.LanguageMode -eq 'ConstrainedLanguage') {
+    Write-Host "Error: This script requires full language mode to run. Please run the script in an environment that supports FullLanguage mode." -ForegroundColor Red
+    exit 1
+}
+
+# Try to load the System.Net.Http assembly.
+try {
+    Add-Type -AssemblyName System.Net.Http -ErrorAction Stop
+}
+catch {
+    Write-Host "Error: The required .NET assembly 'System.Net.Http' could not be loaded. This script requires a full .NET environment. Please run it on PowerShell 7 or an environment that supports these assemblies." -ForegroundColor Red
+    exit 1
+}
+
 
 <#
 .SYNOPSIS
